@@ -1,6 +1,5 @@
 
 
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -43,18 +42,6 @@
     <link rel="up" title="Networking" href="index-network.html" />
     <link rel="next" title="Remoting" href="remoting.html" />
     <link rel="prev" title="Cluster Specification" href="../common/cluster.html" />
-    <!--Google Analytics-->
-    <script type="text/javascript">
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-21117439-1']);
-      _gaq.push(['_setDomainName', 'akka.io']);
-      _gaq.push(['_trackPageview']);
-      (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })()
-    </script>
 
   </head>
   <body>
@@ -101,10 +88,7 @@
             </ul>
           </div>
         </div>
-        <div class="row">
-          <div class="span9">
-            <div id="cse">Loading</div>
-          </div><div class="span9">
+        <div class="row"><div class="span9">
             
   <div class="section" id="cluster-usage">
 <span id="cluster-usage-scala"></span><h1>Cluster Usage</h1>
@@ -124,27 +108,27 @@ with the Cluster enabled. It joins the cluster and logs some membership events.<
 <ol class="arabic simple">
 <li>Add the following <tt class="docutils literal"><span class="pre">application.conf</span></tt> in your project, place it in <tt class="docutils literal"><span class="pre">src/main/resources</span></tt>:</li>
 </ol>
-<div class="highlight-scala"><pre>akka {
+<div class="highlight-scala"><div class="highlight"><pre>akka {
   actor {
-    provider = "akka.cluster.ClusterActorRefProvider"
+    provider = &quot;akka.cluster.ClusterActorRefProvider&quot;
   }
   remote {
     log-remote-lifecycle-events = off
     netty.tcp {
-      hostname = "127.0.0.1"
+      hostname = &quot;127.0.0.1&quot;
       port = 0
     }
   }
 
   cluster {
     seed-nodes = [
-      "akka.tcp://ClusterSystem@127.0.0.1:2551",
-      "akka.tcp://ClusterSystem@127.0.0.1:2552"]
+      &quot;akka.tcp://ClusterSystem@127.0.0.1:2551&quot;,
+      &quot;akka.tcp://ClusterSystem@127.0.0.1:2552&quot;]
 
     auto-down = on
   }
 }
-</pre>
+</pre></div>
 </div>
 <p>To enable cluster capabilities in your Akka project you should, at a minimum, add the <a class="reference internal" href="remoting.html#remoting-scala"><em>Remoting</em></a>
 settings, but with <tt class="docutils literal"><span class="pre">akka.cluster.ClusterActorRefProvider</span></tt>.
@@ -155,7 +139,7 @@ ip-addresses or host names of the machines in <tt class="docutils literal"><span
 <ol class="arabic simple" start="2">
 <li>Add the following main program to your project, place it in <tt class="docutils literal"><span class="pre">src/main/scala</span></tt>:</li>
 </ol>
-<div class="highlight-scala"><pre>package sample.cluster.simple
+<div class="highlight-scala"><div class="highlight"><pre>package sample.cluster.simple
 
 import akka.actor._
 import akka.cluster.Cluster
@@ -166,12 +150,12 @@ object SimpleClusterApp {
 
     // Override the configuration of the port
     // when specified as program argument
-    if (args.nonEmpty) System.setProperty("akka.remote.netty.tcp.port", args(0))
+    if (args.nonEmpty) System.setProperty(&quot;akka.remote.netty.tcp.port&quot;, args(0))
 
     // Create an Akka system
-    val system = ActorSystem("ClusterSystem")
+    val system = ActorSystem(&quot;ClusterSystem&quot;)
     val clusterListener = system.actorOf(Props[SimpleClusterListener],
-      name = "clusterListener")
+      name = &quot;clusterListener&quot;)
 
     Cluster(system).subscribe(clusterListener, classOf[ClusterDomainEvent])
   }
@@ -180,17 +164,18 @@ object SimpleClusterApp {
 class SimpleClusterListener extends Actor with ActorLogging {
   def receive = {
     case state: CurrentClusterState ⇒
-      log.info("Current members: {}", state.members.mkString(", "))
+      log.info(&quot;Current members: {}&quot;, state.members.mkString(&quot;, &quot;))
     case MemberUp(member) ⇒
-      log.info("Member is Up: {}", member.address)
+      log.info(&quot;Member is Up: {}&quot;, member.address)
     case UnreachableMember(member) ⇒
-      log.info("Member detected as unreachable: {}", member)
+      log.info(&quot;Member detected as unreachable: {}&quot;, member)
     case MemberRemoved(member, previousStatus) ⇒
-      log.info("Member is Removed: {} after {}",
+      log.info(&quot;Member is Removed: {} after {}&quot;,
         member.address, previousStatus)
     case _: ClusterDomainEvent ⇒ // ignore
   }
-}</pre>
+}
+</pre></div>
 </div>
 <ol class="arabic" start="3">
 <li><p class="first">Start the first seed node. Open a sbt session in one terminal window and run:</p>
@@ -238,14 +223,16 @@ to configured initial contact points, so-called seed nodes. When a new node is s
 it sends a message to all seed nodes and then sends join command to the one that
 answers first. If no one of the seed nodes replied (might not be started yet)
 it retries this procedure until successful or shutdown.</p>
-<p>You define the seed nodes in the <a class="reference internal" href="cluster-usage.html#cluster-configuration-scala"><em>Configuration</em></a> file (application.conf):</p>
-<div class="highlight-scala"><pre>akka.cluster.seed-nodes = [
-  "akka.tcp://ClusterSystem@host1:2552",
-  "akka.tcp://ClusterSystem@host2:2552"]</pre>
+<p>You define the seed nodes in the <a class="reference internal" href="#cluster-configuration-scala"><em>Configuration</em></a> file (application.conf):</p>
+<div class="highlight-scala"><div class="highlight"><pre>akka.cluster.seed-nodes = [
+  &quot;akka.tcp://ClusterSystem@host1:2552&quot;,
+  &quot;akka.tcp://ClusterSystem@host2:2552&quot;]
+</pre></div>
 </div>
 <p>This can also be defined as Java system properties when starting the JVM using the following syntax:</p>
-<div class="highlight-scala"><pre>-Dakka.cluster.seed-nodes.0=akka.tcp://ClusterSystem@host1:2552
--Dakka.cluster.seed-nodes.1=akka.tcp://ClusterSystem@host2:2552</pre>
+<div class="highlight-scala"><div class="highlight"><pre>-Dakka.cluster.seed-nodes.0=akka.tcp://ClusterSystem@host1:2552
+-Dakka.cluster.seed-nodes.1=akka.tcp://ClusterSystem@host2:2552
+</pre></div>
 </div>
 <p>The seed nodes can be started in any order and it is not necessary to have all
 seed nodes running, but the node configured as the first element in the <tt class="docutils literal"><span class="pre">seed-nodes</span></tt>
@@ -257,8 +244,8 @@ can join.</p>
 <p>Once more than two seed nodes have been started it is no problem to shut down the first
 seed node. If the first seed node is restarted it will first try join the other
 seed nodes in the existing cluster.</p>
-<p>If you don't configure the seed nodes you need to join manually, using <a class="reference internal" href="cluster-usage.html#cluster-jmx-scala"><em>JMX</em></a>
-or <a class="reference internal" href="cluster-usage.html#cluster-command-line-scala"><em>Command Line Management</em></a>. You can join to any node in the cluster. It doesn't
+<p>If you don't configure the seed nodes you need to join manually, using <a class="reference internal" href="#cluster-jmx-scala"><em>JMX</em></a>
+or <a class="reference internal" href="#cluster-command-line-scala"><em>Command Line Management</em></a>. You can join to any node in the cluster. It doesn't
 have to be configured as a seed node.</p>
 <p>Joining can also be performed programatically with <tt class="docutils literal"><span class="pre">Cluster(system).join(address)</span></tt>.</p>
 <p>Unsuccessful join attempts are automatically retried after the time period defined in
@@ -278,8 +265,8 @@ request is accepted.</p>
 leader is not allowed to perform its duties, such as changing status of
 new joining members to 'Up'. The status of the unreachable member must be
 changed to 'Down'. This can be performed automatically or manually. By
-default it must be done manually, using using <a class="reference internal" href="cluster-usage.html#cluster-jmx-scala"><em>JMX</em></a> or
-<a class="reference internal" href="cluster-usage.html#cluster-command-line-scala"><em>Command Line Management</em></a>.</p>
+default it must be done manually, using using <a class="reference internal" href="#cluster-jmx-scala"><em>JMX</em></a> or
+<a class="reference internal" href="#cluster-command-line-scala"><em>Command Line Management</em></a>.</p>
 <p>It can also be performed programatically with <tt class="docutils literal"><span class="pre">Cluster(system).down(address)</span></tt>.</p>
 <p>You can enable automatic downing with configuration:</p>
 <div class="highlight-scala"><div class="highlight"><pre><span class="n">akka</span><span class="o">.</span><span class="n">cluster</span><span class="o">.</span><span class="n">auto</span><span class="o">-</span><span class="n">down</span> <span class="k">=</span> <span class="n">on</span>
@@ -296,7 +283,7 @@ desired by some applications but not by others.</p>
 as unreachable and removed after the automatic or manual downing as described
 above.</p>
 <p>A more graceful exit can be performed if you tell the cluster that a node shall leave.
-This can be performed using <a class="reference internal" href="cluster-usage.html#cluster-jmx-scala"><em>JMX</em></a> or <a class="reference internal" href="cluster-usage.html#cluster-command-line-scala"><em>Command Line Management</em></a>.
+This can be performed using <a class="reference internal" href="#cluster-jmx-scala"><em>JMX</em></a> or <a class="reference internal" href="#cluster-command-line-scala"><em>Command Line Management</em></a>.
 It can also be performed programatically with <tt class="docutils literal"><span class="pre">Cluster(system).leave(address)</span></tt>.</p>
 <p>Note that this command can be issued to any member in the cluster, not necessarily the
 one that is leaving. The cluster extension, but not the actor system or JVM, of the
@@ -389,14 +376,14 @@ added or removed to the cluster dynamically.</p>
 potential, frontend nodes, and send them a registration message so that they know
 that they can use the backend worker.</p>
 <p>The frontend that receives user jobs and delegates to one of the registered backend workers:</p>
-<div class="highlight-scala"><pre>class TransformationFrontend extends Actor {
+<div class="highlight-scala"><div class="highlight"><pre>class TransformationFrontend extends Actor {
 
   var backends = IndexedSeq.empty[ActorRef]
   var jobCounter = 0
 
   def receive = {
     case job: TransformationJob if backends.isEmpty ⇒
-      sender ! JobFailed("Service unavailable, try again later", job)
+      sender ! JobFailed(&quot;Service unavailable, try again later&quot;, job)
 
     case job: TransformationJob ⇒
       jobCounter += 1
@@ -410,7 +397,7 @@ that they can use the backend worker.</p>
       backends = backends.filterNot(_ == a)
   }
 }
-</pre>
+</pre></div>
 </div>
 <p>Note that the <tt class="docutils literal"><span class="pre">TransformationFrontend</span></tt> actor watch the registered backend
 to be able to remove it from its list of availble backend workers.
@@ -506,7 +493,7 @@ is dynamically adjusted to reflect current network conditions.</p>
 </div>
 <p>where F is the cumulative distribution function of a normal distribution with mean
 and standard deviation estimated from historical heartbeat inter-arrival times.</p>
-<p>In the <a class="reference internal" href="cluster-usage.html#cluster-configuration-scala"><em>Configuration</em></a> you can adjust the <tt class="docutils literal"><span class="pre">akka.cluster.failure-detector.threshold</span></tt>
+<p>In the <a class="reference internal" href="#cluster-configuration-scala"><em>Configuration</em></a> you can adjust the <tt class="docutils literal"><span class="pre">akka.cluster.failure-detector.threshold</span></tt>
 to define when a <em>phi</em> value is considered to be a failure.</p>
 <p>A low <tt class="docutils literal"><span class="pre">threshold</span></tt> is prone to generate many false positives but ensures
 a quick detection in the event of a real crash. Conversely, a high <tt class="docutils literal"><span class="pre">threshold</span></tt>
@@ -526,7 +513,7 @@ a standard deviation of 100 ms.</p>
 <p>To be able to survive sudden abnormalities, such as garbage collection pauses and
 transient network failures the failure detector is configured with a margin,
 <tt class="docutils literal"><span class="pre">akka.cluster.failure-detector.acceptable-heartbeat-pause</span></tt>. You may want to
-adjust the <a class="reference internal" href="cluster-usage.html#cluster-configuration-scala"><em>Configuration</em></a> of this depending on you environment.
+adjust the <a class="reference internal" href="#cluster-configuration-scala"><em>Configuration</em></a> of this depending on you environment.
 This is how the curve looks like for <tt class="docutils literal"><span class="pre">acceptable-heartbeat-pause</span></tt> configured to
 3 seconds.</p>
 <img alt="../_images/phi31.png" src="../_images/phi31.png" />
@@ -534,7 +521,7 @@ This is how the curve looks like for <tt class="docutils literal"><span class="p
 generates <tt class="docutils literal"><span class="pre">Terminated</span></tt> message from network failures and JVM crashes, in addition
 to graceful termination of watched actor.</p>
 <p>If you encounter suspicious false positives when the system is under load you should
-define a separate dispatcher for the cluster actors as described in <a class="reference internal" href="cluster-usage.html#cluster-dispatcher-scala"><em>Cluster Dispatcher</em></a>.</p>
+define a separate dispatcher for the cluster actors as described in <a class="reference internal" href="#cluster-dispatcher-scala"><em>Cluster Dispatcher</em></a>.</p>
 </div>
 <div class="section" id="cluster-aware-routers">
 <span id="cluster-aware-routers-scala"></span><h2>Cluster Aware Routers</h2>
@@ -601,7 +588,7 @@ added to the router when nodes join the cluster.</p>
   <span class="n">name</span> <span class="k">=</span> <span class="s">&quot;workerRouter2&quot;</span><span class="o">)</span>
 </pre></div>
 </div>
-<p>See <a class="reference internal" href="cluster-usage.html#cluster-configuration-scala"><em>Configuration</em></a> section for further descriptions of the settings.</p>
+<p>See <a class="reference internal" href="#cluster-configuration-scala"><em>Configuration</em></a> section for further descriptions of the settings.</p>
 </div>
 <div class="section" id="router-example-with-lookup-of-routees">
 <h3>Router Example with Lookup of Routees</h3>
@@ -775,7 +762,7 @@ the cluster.</p>
   <span class="n">name</span> <span class="k">=</span> <span class="s">&quot;workerRouter3&quot;</span><span class="o">)</span>
 </pre></div>
 </div>
-<p>See <a class="reference internal" href="cluster-usage.html#cluster-configuration-scala"><em>Configuration</em></a> section for further descriptions of the settings.</p>
+<p>See <a class="reference internal" href="#cluster-configuration-scala"><em>Configuration</em></a> section for further descriptions of the settings.</p>
 </div>
 <div class="section" id="router-example-with-remote-deployed-routees">
 <h3>Router Example with Remote Deployed Routees</h3>
@@ -790,7 +777,7 @@ in the contrib module. The <tt class="docutils literal"><span class="pre">Cluste
 </div>
 <p>We also need an actor on each node that keeps track of where current single master exists and
 delegates jobs to the <tt class="docutils literal"><span class="pre">StatsService</span></tt>.</p>
-<div class="highlight-scala"><pre>class StatsFacade extends Actor with ActorLogging {
+<div class="highlight-scala"><div class="highlight"><pre>class StatsFacade extends Actor with ActorLogging {
   import context.dispatcher
   val cluster = Cluster(context.system)
 
@@ -805,24 +792,24 @@ delegates jobs to the <tt class="docutils literal"><span class="pre">StatsServic
 
   def receive = {
     case job: StatsJob if membersByAge.isEmpty ⇒
-      sender ! JobFailed("Service unavailable, try again later")
+      sender ! JobFailed(&quot;Service unavailable, try again later&quot;)
     case job: StatsJob ⇒
       currentMaster.tell(job, sender)
     case state: CurrentClusterState ⇒
       membersByAge = immutable.SortedSet.empty(ageOrdering) ++ state.members.collect {
-        case m if m.hasRole("compute") ⇒ m
+        case m if m.hasRole(&quot;compute&quot;) ⇒ m
       }
-    case MemberUp(m)         ⇒ if (m.hasRole("compute")) membersByAge += m
-    case MemberRemoved(m, _) ⇒ if (m.hasRole("compute")) membersByAge -= m
+    case MemberUp(m)         ⇒ if (m.hasRole(&quot;compute&quot;)) membersByAge += m
+    case MemberRemoved(m, _) ⇒ if (m.hasRole(&quot;compute&quot;)) membersByAge -= m
     case _: MemberEvent      ⇒ // not interesting
   }
 
   def currentMaster: ActorSelection =
     context.actorSelection(RootActorPath(membersByAge.head.address) /
-      "user" / "singleton" / "statsService")
+      &quot;user&quot; / &quot;singleton&quot; / &quot;statsService&quot;)
 
 }
-</pre>
+</pre></div>
 </div>
 <p>The <tt class="docutils literal"><span class="pre">StatsFacade</span></tt> receives text from users and delegates to the current <tt class="docutils literal"><span class="pre">StatsService</span></tt>, the single
 master. It listens to cluster events to lookup the <tt class="docutils literal"><span class="pre">StatsService</span></tt> on the oldest node.</p>
@@ -886,7 +873,7 @@ It can be configured to use a specific MetricsSelector to produce the probabilit
 <li><tt class="docutils literal"><span class="pre">mix</span></tt> / <tt class="docutils literal"><span class="pre">MixMetricsSelector</span></tt> - Combines heap, cpu and load. Weights based on mean of remaining capacity of the combined selectors.</li>
 <li>Any custom implementation of <tt class="docutils literal"><span class="pre">akka.cluster.routing.MetricsSelector</span></tt></li>
 </ul>
-<p>The collected metrics values are smoothed with <a class="reference external" href="http://en.wikipedia.org/wiki/Moving_average#Exponential_moving_average">exponential weighted moving average</a>. In the <a class="reference internal" href="cluster-usage.html#cluster-configuration-scala"><em>Configuration</em></a> you can adjust how quickly past data is decayed compared to new data.</p>
+<p>The collected metrics values are smoothed with <a class="reference external" href="http://en.wikipedia.org/wiki/Moving_average#Exponential_moving_average">exponential weighted moving average</a>. In the <a class="reference internal" href="#cluster-configuration-scala"><em>Configuration</em></a> you can adjust how quickly past data is decayed compared to new data.</p>
 <p>Let's take a look at this router in action.</p>
 <p>In this example the following imports are used:</p>
 <div class="highlight-scala"><div class="highlight"><pre><span class="k">import</span> <span class="nn">scala.annotation.tailrec</span>
@@ -1032,11 +1019,11 @@ and you can try by starting nodes in different terminal windows. For example, st
 
   <span class="k">def</span> <span class="n">receive</span> <span class="k">=</span> <span class="o">{</span>
     <span class="k">case</span> <span class="nc">ClusterMetricsChanged</span><span class="o">(</span><span class="n">clusterMetrics</span><span class="o">)</span> <span class="k">⇒</span>
-      <span class="n">clusterMetrics</span><span class="o">.</span><span class="n">filter</span><span class="o">(</span><span class="n">_</span><span class="o">.</span><span class="n">address</span> <span class="o">==</span> <span class="n">selfAddress</span><span class="o">)</span> <span class="n">foreach</span> <span class="o">{</span> <span class="n">nodeMetrics</span> <span class="k">⇒</span>
+      <span class="n">clusterMetrics</span><span class="o">.</span><span class="n">filter</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">address</span> <span class="o">==</span> <span class="n">selfAddress</span><span class="o">)</span> <span class="n">foreach</span> <span class="o">{</span> <span class="n">nodeMetrics</span> <span class="k">⇒</span>
         <span class="n">logHeap</span><span class="o">(</span><span class="n">nodeMetrics</span><span class="o">)</span>
         <span class="n">logCpu</span><span class="o">(</span><span class="n">nodeMetrics</span><span class="o">)</span>
       <span class="o">}</span>
-    <span class="k">case</span> <span class="n">state</span><span class="k">:</span> <span class="kt">CurrentClusterState</span> <span class="k">⇒</span> <span class="kt">//</span> <span class="kt">ignore</span>
+    <span class="k">case</span> <span class="n">state</span><span class="k">:</span> <span class="kt">CurrentClusterState</span> <span class="k">⇒</span> <span class="c1">// ignore</span>
   <span class="o">}</span>
 
   <span class="k">def</span> <span class="n">logHeap</span><span class="o">(</span><span class="n">nodeMetrics</span><span class="k">:</span> <span class="kt">NodeMetrics</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="n">nodeMetrics</span> <span class="k">match</span> <span class="o">{</span>
@@ -1058,7 +1045,7 @@ and you can try by starting nodes in different terminal windows. For example, st
 <h3>Custom Metrics Collector</h3>
 <p>You can plug-in your own metrics collector instead of
 <tt class="docutils literal"><span class="pre">akka.cluster.SigarMetricsCollector</span></tt> or <tt class="docutils literal"><span class="pre">akka.cluster.JmxMetricsCollector</span></tt>. Look at those two implementations
-for inspiration. The implementation class can be defined in the <a class="reference internal" href="cluster-usage.html#cluster-configuration-scala"><em>Configuration</em></a>.</p>
+for inspiration. The implementation class can be defined in the <a class="reference internal" href="#cluster-configuration-scala"><em>Configuration</em></a>.</p>
 </div>
 </div>
 <div class="section" id="how-to-test">
@@ -1067,7 +1054,7 @@ for inspiration. The implementation class can be defined in the <a class="refere
 <p>Set up your project according to the instructions in <a class="reference internal" href="../dev/multi-node-testing.html#multi-node-testing"><em>Multi Node Testing</em></a> and <a class="reference internal" href="../dev/multi-jvm-testing.html#multi-jvm-testing"><em>Multi JVM Testing</em></a>, i.e.
 add the <tt class="docutils literal"><span class="pre">sbt-multi-jvm</span></tt> plugin and the dependency to <tt class="docutils literal"><span class="pre">akka-multi-node-testkit</span></tt>.</p>
 <p>First, as described in <a class="reference internal" href="../dev/multi-node-testing.html#multi-node-testing"><em>Multi Node Testing</em></a>, we need some scaffolding to configure the <tt class="docutils literal"><span class="pre">MultiNodeSpec</span></tt>.
-Define the participating roles and their <a class="reference internal" href="cluster-usage.html#cluster-configuration-scala"><em>Configuration</em></a> in an object extending <tt class="docutils literal"><span class="pre">MultiNodeConfig</span></tt>:</p>
+Define the participating roles and their <a class="reference internal" href="#cluster-configuration-scala"><em>Configuration</em></a> in an object extending <tt class="docutils literal"><span class="pre">MultiNodeConfig</span></tt>:</p>
 <div class="highlight-scala"><div class="highlight"><pre><span class="k">import</span> <span class="nn">akka.remote.testkit.MultiNodeConfig</span>
 <span class="k">import</span> <span class="nn">com.typesafe.config.ConfigFactory</span>
 
@@ -1151,7 +1138,7 @@ That can be done like this:</p>
 <div class="highlight-scala"><div class="highlight"><pre><span class="nc">Cluster</span><span class="o">(</span><span class="n">system</span><span class="o">)</span> <span class="n">join</span> <span class="n">firstAddress</span>
 </pre></div>
 </div>
-<p>Notice how the <cite>testActor</cite> from <a class="reference internal" href="testing.html#akka-testkit"><em>testkit</em></a> is added as <a class="reference internal" href="cluster-usage.html#cluster-subscriber-scala"><em>subscriber</em></a>
+<p>Notice how the <cite>testActor</cite> from <a class="reference internal" href="testing.html#akka-testkit"><em>testkit</em></a> is added as <a class="reference internal" href="#cluster-subscriber-scala"><em>subscriber</em></a>
 to cluster changes and then waiting for certain events, such as in this case all members becoming 'Up'.</p>
 <p>The above code was running for all roles (JVMs). <tt class="docutils literal"><span class="pre">runOn</span></tt> is a convenient utility to declare that a certain block
 of code should only run for a specific role.</p>
@@ -1205,7 +1192,7 @@ The JMX information can be displayed with an ordinary JMX console such as JConso
 <p>The cluster can be managed with the script <cite>bin/akka-cluster</cite> provided in the
 Akka distribution.</p>
 <p>Run it without parameters to see instructions about how to use the script:</p>
-<div class="highlight-scala"><pre>Usage: bin/akka-cluster &lt;node-hostname&gt; &lt;jmx-port&gt; &lt;command&gt; ...
+<div class="highlight-scala"><div class="highlight"><pre>Usage: bin/akka-cluster &lt;node-hostname&gt; &lt;jmx-port&gt; &lt;command&gt; ...
 
 Supported commands are:
            join &lt;node-url&gt; - Sends request a JOIN node with the specified URL
@@ -1221,18 +1208,19 @@ Supported commands are:
                              node cluster)
               is-available - Checks if the member node is available
 Where the &lt;node-url&gt; should be on the format of
-  'akka.&lt;protocol&gt;://&lt;actor-system-name&gt;@&lt;hostname&gt;:&lt;port&gt;'
+  &#39;akka.&lt;protocol&gt;://&lt;actor-system-name&gt;@&lt;hostname&gt;:&lt;port&gt;&#39;
 
 Examples: bin/akka-cluster localhost 9999 is-available
           bin/akka-cluster localhost 9999 join akka.tcp://MySystem@darkstar:2552
-          bin/akka-cluster localhost 9999 cluster-status</pre>
+          bin/akka-cluster localhost 9999 cluster-status
+</pre></div>
 </div>
 <p>To be able to use the script you must enable remote monitoring and management when starting the JVMs of the cluster nodes,
 as described in <a class="reference external" href="http://docs.oracle.com/javase/6/docs/technotes/guides/management/agent.html">Monitoring and Management Using JMX Technology</a></p>
 <p>Example of system properties to enable remote monitoring and management:</p>
-<div class="highlight-scala"><div class="highlight"><pre><span class="n">java</span> <span class="o">-</span><span class="nc">Dcom</span><span class="o">.</span><span class="n">sun</span><span class="o">.</span><span class="n">management</span><span class="o">.</span><span class="n">jmxremote</span><span class="o">.</span><span class="n">port</span><span class="o">=</span><span class="mi">9999</span> <span class="o">\</span>
-<span class="o">-</span><span class="nc">Dcom</span><span class="o">.</span><span class="n">sun</span><span class="o">.</span><span class="n">management</span><span class="o">.</span><span class="n">jmxremote</span><span class="o">.</span><span class="n">authenticate</span><span class="o">=</span><span class="kc">false</span> <span class="o">\</span>
-<span class="o">-</span><span class="nc">Dcom</span><span class="o">.</span><span class="n">sun</span><span class="o">.</span><span class="n">management</span><span class="o">.</span><span class="n">jmxremote</span><span class="o">.</span><span class="n">ssl</span><span class="o">=</span><span class="kc">false</span>
+<div class="highlight-scala"><div class="highlight"><pre><span class="n">java</span> <span class="o">-</span><span class="nc">Dcom</span><span class="o">.</span><span class="n">sun</span><span class="o">.</span><span class="n">management</span><span class="o">.</span><span class="n">jmxremote</span><span class="o">.</span><span class="n">port</span><span class="k">=</span><span class="mi">9999</span> <span class="o">\</span>
+<span class="o">-</span><span class="nc">Dcom</span><span class="o">.</span><span class="n">sun</span><span class="o">.</span><span class="n">management</span><span class="o">.</span><span class="n">jmxremote</span><span class="o">.</span><span class="n">authenticate</span><span class="k">=</span><span class="kc">false</span> <span class="o">\</span>
+<span class="o">-</span><span class="nc">Dcom</span><span class="o">.</span><span class="n">sun</span><span class="o">.</span><span class="n">management</span><span class="o">.</span><span class="n">jmxremote</span><span class="o">.</span><span class="n">ssl</span><span class="k">=</span><span class="kc">false</span>
 </pre></div>
 </div>
 </div>
@@ -1559,177 +1547,10 @@ For this purpose you can define a separate dispatcher to be used for the cluster
       © 2013 <a href="http://typesafe.com/">Typesafe Inc.</a> <span class="license">Akka is Open Source and available under the Apache 2 License.</span>
     </p>
     <p style="float: right; font-size: 12px;">
-      Last updated: Oct 23, 2013
+      Last updated: Feb 22, 2014
     </p>          
   </div>
 </div>
-<script src="http://www.google.com/jsapi" type="text/javascript"></script>
-<script type="text/javascript">
-    google.load('search', '1', {language : 'en', style : google.loader.themes.MINIMALIST});
-    google.setOnLoadCallback(function() {
-    var customSearchOptions = {};  var customSearchControl = new google.search.CustomSearchControl(
-    '003065520604945464838:izzukx8-qba', customSearchOptions);
-    customSearchControl.setResultSetSize(google.search.Search.FILTERED_CSE_RESULTSET);
-    customSearchControl.draw('cse');
-    var path = window.location.pathname.split('/').slice(0,4);
-    if(window.location.hostname && path.length >= 4) {
-    var site = "site:" + window.location.hostname + path.join('/').toString();
-    customSearchControl.setSearchStartingCallback(this, function(c, s, q) { s.setQueryAddition(site); });
-    }
-    }, true);
-</script>
-<style type="text/css">
-    .gsc-control-cse {
-    font-family: Arial, sans-serif;
-    border-color: rgb(242, 242, 235);
-    background-color: rgb(242, 242, 235);
-    }
-    .gsc-control-cse .gsc-table-result {
-      font-family: Arial, sans-serif;
-      display: block;
-    }
-    input.gsc-input {
-    border-color: #BBBBBB;
-    }
-    input.gsc-search-button {
-    border-color: rgb(34, 57, 64);
-    background-color: rgb(68, 114, 129);
-    color: #FFFFFF;
-    }
-    .gsc-tabHeader.gsc-tabhInactive {
-    border-color: #777777;
-    background-color: #777777;
-    }
-    .gsc-tabHeader.gsc-tabhActive {
-    border-color: #333333;
-    background-color: #333333;
-    }
-    .gsc-tabsArea {
-    border-color: #333333;
-    }
-    .gsc-webResult.gsc-result,
-    .gsc-results .gsc-imageResult {
-      border-color: #666666;
-      background-color: #FFFFFF;
-      padding: 0.5em 0.5em;
-    }
-    .gsc-webResult.gsc-result:hover,
-    .gsc-imageResult:hover {
-      border-color: #AAAAAA;
-      background-color: #FFFFFF;
-      padding: 0.5em 0.5em;
-    }
-    .gsc-webResult.gsc-result.gsc-promotion:hover {
-    border-color: #AAAAAA;
-    background-color: #FFFFFF;
-    }
-    .gs-webResult.gs-result a.gs-title:link,
-    .gs-webResult.gs-result a.gs-title:link b,
-    .gs-imageResult a.gs-title:link,
-    .gs-imageResult a.gs-title:link b {
-    color: #444444;
-    }
-    .gs-webResult.gs-result a.gs-title:visited,
-    .gs-webResult.gs-result a.gs-title:visited b,
-    .gs-imageResult a.gs-title:visited,
-    .gs-imageResult a.gs-title:visited b {
-    color: #444444;
-    }
-    .gs-webResult.gs-result a.gs-title:hover,
-    .gs-webResult.gs-result a.gs-title:hover b,
-    .gs-imageResult a.gs-title:hover,
-    .gs-imageResult a.gs-title:hover b {
-    color: #444444;
-    }
-    .gs-webResult.gs-result a.gs-title:active,
-    .gs-webResult.gs-result a.gs-title:active b,
-    .gs-imageResult a.gs-title:active,
-    .gs-imageResult a.gs-title:active b {
-    color: #777777;
-    }
-    .gsc-cursor-page {
-    color: #444444;
-    }
-    a.gsc-trailing-more-results:link {
-    color: #444444;
-    }
-    .gs-webResult .gs-snippet,
-    .gs-imageResult .gs-snippet,
-    .gs-fileFormatType {
-    color: #333333;
-    }
-    .gs-webResult div.gs-visibleUrl,
-    .gs-imageResult div.gs-visibleUrl {
-    color: #000000;
-    }
-    .gs-webResult div.gs-visibleUrl-short {
-    color: #000000;
-    }
-    .gs-webResult div.gs-visibleUrl-short {
-    display: none;
-    }
-    .gs-webResult div.gs-visibleUrl-long {
-    display: block;
-    }
-    .gs-promotion div.gs-visibleUrl-short {
-    display: none;
-    }
-    .gs-promotion div.gs-visibleUrl-long {
-    display: block;
-    }
-    .gsc-cursor-box {
-    border-color: #FFFFFF;
-    }
-    .gsc-results .gsc-cursor-box .gsc-cursor-page {
-    border-color: #777777;
-    background-color: #FFFFFF;
-    color: #444444;
-    }
-    .gsc-results .gsc-cursor-box .gsc-cursor-current-page {
-    border-color: #333333;
-    background-color: #333333;
-    color: #444444;
-    }
-    .gsc-webResult.gsc-result.gsc-promotion {
-    border-color: #CCCCCC;
-    background-color: #E6E6E6;
-    }
-    .gsc-completion-title {
-    color: #444444;
-    }
-    .gsc-completion-snippet {
-    color: #333333;
-    }
-    .gs-promotion a.gs-title:link,
-    .gs-promotion a.gs-title:link *,
-    .gs-promotion .gs-snippet a:link {
-    color: #0000CC;
-    }
-    .gs-promotion a.gs-title:visited,
-    .gs-promotion a.gs-title:visited *,
-    .gs-promotion .gs-snippet a:visited {
-    color: #0000CC;
-    }
-    .gs-promotion a.gs-title:hover,
-    .gs-promotion a.gs-title:hover *,
-    .gs-promotion .gs-snippet a:hover {
-    color: #444444;
-    }
-    .gs-promotion a.gs-title:active,
-    .gs-promotion a.gs-title:active *,
-    .gs-promotion .gs-snippet a:active {
-    color: #00CC00;
-    }
-    .gs-promotion .gs-snippet,
-    .gs-promotion .gs-title .gs-promotion-title-right,
-    .gs-promotion .gs-title .gs-promotion-title-right *  {
-    color: #333333;
-    }
-    .gs-promotion .gs-visibleUrl,
-    .gs-promotion .gs-visibleUrl-short {
-    color: #00CC00;
-    }
-</style>
 <script type="text/javascript">
   $('#toc').toc();
 </script>

@@ -1,12 +1,14 @@
 #!/usr/local/bin/python
 # get stuff with wget -r -k -L  http://doc.akka.io/docs/akka/2.2.3/index.html
 
+from __future__ import print_function
+
 import sqlite3, re
 
 from bs4 import BeautifulSoup
 from collections import deque, defaultdict
 from contextlib import contextmanager
-from os.path import normpath, join, split
+from os.path import normpath, join, split, isdir
 from urllib import quote
 
 
@@ -60,15 +62,19 @@ def analyze_link(tag, fname):
     name = tag.text.strip()
     if name:
         href = tag.attrs['href'].strip()
+        filename = get_file_name(href)
+        if filename:
 
-        target = normalize_target(fname, href)
-        name = normalize_name(name, target)
+            target = normalize_target(fname, href)
+            name = normalize_name(name, target)
 
-        return target, name
+            return target, name
 
 
 def parse_page(path):
     sout = None
+    if isdir(path):
+        path = path + 'index.html'
     with open(path) as page:
         soup = BeautifulSoup(page)
 
@@ -79,7 +85,7 @@ def crawl_page(doc_path, fname):
 
     internal_links = lambda href: not href.startswith('http')
     link_classifier = {
-        'class': u'reference',
+        'class': u'reference internal',
         'href': internal_links
     }
 
@@ -90,7 +96,7 @@ def crawl_page(doc_path, fname):
             yield analyzed
 
 
-def generate_index(doc_path, seed_file):
+def generate_index(doc_path, seed_file, logger):
     seen = set([seed_file])
     queue = deque(seen)
 
@@ -99,6 +105,7 @@ def generate_index(doc_path, seed_file):
 
     while queue:
         fname = queue.pop()
+        logger("processing %s ..." % fname)
         for target, name in crawl_page(doc_path, fname):
 
             fpath = get_file_name(target)
@@ -121,14 +128,12 @@ def save_row(cur, name, path):
     cur.execute('INSERT OR IGNORE INTO searchIndex(name, type, path) VALUES (?,?,?)', (name, 'Guide', path))
 
 
-def log(name, path):
-    print u'name: %s, path: %s' % (name, path)
-
-
 def crawl(cur, crawler, logger, saver):
+    count = 0
     for name, path in crawler():
-        logger(name, path)
         saver(cur, name, path)
+        count += 1
+    logger("crawled %d entries" % count)
 
 
 def make_toc(doc_path, *toc_files):
@@ -154,16 +159,16 @@ if __name__ == "__main__":
     import sys
 
     if '-h' in sys.argv:
-        print 'usage: crawler.py [-d | -n] [-q | -s] [-h]'
-        print '  -d | -n      dry run/no op'
-        print '  -q | -s      quiet/silent'
-        print '  -h           show help'
+        print('usage: crawler.py [-d | -n] [-q | -s] [-h]')
+        print('  -d | -n      dry run/no op')
+        print('  -q | -s      quiet/silent')
+        print('  -h           show help')
         sys.exit(-1)
 
     if u'-q' in sys.argv or u'-s' in sys.argv:
-        logger = lambda a, b: None
+      logger = lambda *a: None
     else:
-        logger = log
+        logger = print
 
     dry_run = False
     if '-d' in sys.argv or '-n' in sys.argv:
@@ -172,7 +177,7 @@ if __name__ == "__main__":
     else:
         storer = save_row
 
-    generator = lambda: generate_index(DOC_PATH, SEED_FILE)
+    generator = lambda: generate_index(DOC_PATH, SEED_FILE, logger)
 
     if dry_run:
         crawl(None, generator, logger, storer)

@@ -1,6 +1,5 @@
 
 
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -43,18 +42,6 @@
     <link rel="up" title="I/O" href="io.html" />
     <link rel="next" title="Encoding and decoding binary data" href="io-codec.html" />
     <link rel="prev" title="I/O" href="io.html" />
-    <!--Google Analytics-->
-    <script type="text/javascript">
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-21117439-1']);
-      _gaq.push(['_setDomainName', 'akka.io']);
-      _gaq.push(['_trackPageview']);
-      (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })()
-    </script>
 
   </head>
   <body>
@@ -101,10 +88,7 @@
             </ul>
           </div>
         </div>
-        <div class="row">
-          <div class="span9">
-            <div id="cse">Loading</div>
-          </div><div class="span9">
+        <div class="row"><div class="span9">
             
   <div class="section" id="old-io">
 <span id="io-scala-old"></span><h1>Old IO</h1>
@@ -359,20 +343,20 @@ data: m times Double
 <p>If after reading in a path segment the next input does not start with a path, we reverse the accumulated segments and return it (dropping the last segment if it is blank).</p>
 <p>Following the path we read in the query (if it exists):</p>
 <div class="highlight-scala"><div class="highlight"><pre><span class="k">def</span> <span class="n">readQuery</span><span class="k">:</span> <span class="kt">IO.Iteratee</span><span class="o">[</span><span class="kt">Option</span><span class="o">[</span><span class="kt">String</span><span class="o">]]</span> <span class="k">=</span> <span class="nc">IO</span> <span class="n">peek</span> <span class="mi">1</span> <span class="n">flatMap</span> <span class="o">{</span>
-  <span class="k">case</span> <span class="nc">QUERY</span> <span class="k">⇒</span> <span class="nc">IO</span> <span class="n">drop</span> <span class="mi">1</span> <span class="n">flatMap</span> <span class="o">(</span><span class="k">_</span> <span class="k">⇒</span> <span class="n">readUriPart</span><span class="o">(</span><span class="n">querychar</span><span class="o">)</span> <span class="n">map</span> <span class="o">(</span><span class="nc">Some</span><span class="o">(</span><span class="n">_</span><span class="o">)))</span>
+  <span class="k">case</span> <span class="nc">QUERY</span> <span class="k">⇒</span> <span class="nc">IO</span> <span class="n">drop</span> <span class="mi">1</span> <span class="n">flatMap</span> <span class="o">(</span><span class="k">_</span> <span class="k">⇒</span> <span class="n">readUriPart</span><span class="o">(</span><span class="n">querychar</span><span class="o">)</span> <span class="n">map</span> <span class="o">(</span><span class="nc">Some</span><span class="o">(</span><span class="k">_</span><span class="o">)))</span>
   <span class="k">case</span> <span class="k">_</span>     <span class="k">⇒</span> <span class="nc">IO</span> <span class="nc">Done</span> <span class="nc">None</span>
 <span class="o">}</span>
 </pre></div>
 </div>
 <p>It is much simpler than reading the path since we aren't doing any parsing of the query since there is no standard format of the query string.</p>
 <p>Both the path and query used the <tt class="docutils literal"><span class="pre">readUriPart</span></tt> <tt class="docutils literal"><span class="pre">Iteratee</span></tt>, which is next:</p>
-<div class="highlight-scala"><pre>val alpha = Set.empty ++ ('a' to 'z') ++ ('A' to 'Z') map (_.toByte)
-val digit = Set.empty ++ ('0' to '9') map (_.toByte)
-val hexdigit = digit ++ (Set.empty ++ ('a' to 'f') ++ ('A' to 'F') map (_.toByte))
-val subdelim = Set('!', '$', '&amp;', '\'', '(', ')', '*', '+', ',', ';', '=') map
+<div class="highlight-scala"><div class="highlight"><pre>val alpha = Set.empty ++ (&#39;a&#39; to &#39;z&#39;) ++ (&#39;A&#39; to &#39;Z&#39;) map (_.toByte)
+val digit = Set.empty ++ (&#39;0&#39; to &#39;9&#39;) map (_.toByte)
+val hexdigit = digit ++ (Set.empty ++ (&#39;a&#39; to &#39;f&#39;) ++ (&#39;A&#39; to &#39;F&#39;) map (_.toByte))
+val subdelim = Set(&#39;!&#39;, &#39;$&#39;, &#39;&amp;&#39;, &#39;\&#39;&#39;, &#39;(&#39;, &#39;)&#39;, &#39;*&#39;, &#39;+&#39;, &#39;,&#39;, &#39;;&#39;, &#39;=&#39;) map
   (_.toByte)
-val pathchar = alpha ++ digit ++ subdelim ++ (Set(':', '@') map (_.toByte))
-val querychar = pathchar ++ (Set('/', '?') map (_.toByte))
+val pathchar = alpha ++ digit ++ subdelim ++ (Set(&#39;:&#39;, &#39;@&#39;) map (_.toByte))
+val querychar = pathchar ++ (Set(&#39;/&#39;, &#39;?&#39;) map (_.toByte))
 
 def readUriPart(allowed: Set[Byte]): IO.Iteratee[String] = for {
   str ← IO takeWhile allowed map ascii
@@ -383,10 +367,10 @@ def readUriPart(allowed: Set[Byte]): IO.Iteratee[String] = for {
 } yield all
 
 def readPChar = IO take 3 map {
-  case Seq('%', rest @ _*) if rest forall hexdigit ⇒
+  case Seq(&#39;%&#39;, rest @ _*) if rest forall hexdigit ⇒
     java.lang.Integer.parseInt(rest map (_.toChar) mkString, 16).toChar
 }
-</pre>
+</pre></div>
 </div>
 <p>Here we have several <tt class="docutils literal"><span class="pre">Set</span></tt>s that contain valid characters pulled from the URI spec. The <tt class="docutils literal"><span class="pre">readUriPart</span></tt> method takes a <tt class="docutils literal"><span class="pre">Set</span></tt> of valid characters (already mapped to <tt class="docutils literal"><span class="pre">Byte</span></tt>s) and will continue to match characters until it reaches on that is not part of the <tt class="docutils literal"><span class="pre">Set</span></tt>. If it is a percent encoded character then that is handled as a valid character and processing continues, or else we are done collecting this part of the URI.</p>
 <p>Headers are next:</p>
@@ -418,7 +402,7 @@ def readPChar = IO take 3 map {
 <div class="highlight-scala"><div class="highlight"><pre><span class="k">def</span> <span class="n">readBody</span><span class="o">(</span><span class="n">headers</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">Header</span><span class="o">])</span> <span class="k">=</span>
   <span class="k">if</span> <span class="o">(</span><span class="n">headers</span><span class="o">.</span><span class="n">exists</span><span class="o">(</span><span class="n">header</span> <span class="k">⇒</span> <span class="n">header</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s">&quot;Content-Length&quot;</span> <span class="o">||</span>
     <span class="n">header</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s">&quot;Transfer-Encoding&quot;</span><span class="o">))</span>
-    <span class="nc">IO</span><span class="o">.</span><span class="n">takeAll</span> <span class="n">map</span> <span class="o">(</span><span class="nc">Some</span><span class="o">(</span><span class="n">_</span><span class="o">))</span>
+    <span class="nc">IO</span><span class="o">.</span><span class="n">takeAll</span> <span class="n">map</span> <span class="o">(</span><span class="nc">Some</span><span class="o">(</span><span class="k">_</span><span class="o">))</span>
   <span class="k">else</span>
     <span class="nc">IO</span> <span class="nc">Done</span> <span class="nc">None</span>
 </pre></div>
@@ -460,7 +444,7 @@ def readPChar = IO take 3 map {
         <span class="n">request</span> <span class="k">←</span> <span class="n">readRequest</span>
       <span class="o">}</span> <span class="k">yield</span> <span class="o">{</span>
         <span class="k">val</span> <span class="n">rsp</span> <span class="k">=</span> <span class="n">request</span> <span class="k">match</span> <span class="o">{</span>
-          <span class="k">case</span> <span class="nc">Request</span><span class="o">(</span><span class="s">&quot;GET&quot;</span><span class="o">,</span> <span class="s">&quot;ping&quot;</span> <span class="o">::</span> <span class="nc">Nil</span><span class="o">,</span> <span class="n">_</span><span class="o">,</span> <span class="n">_</span><span class="o">,</span> <span class="n">headers</span><span class="o">,</span> <span class="n">_</span><span class="o">)</span> <span class="k">⇒</span>
+          <span class="k">case</span> <span class="nc">Request</span><span class="o">(</span><span class="s">&quot;GET&quot;</span><span class="o">,</span> <span class="s">&quot;ping&quot;</span> <span class="o">::</span> <span class="nc">Nil</span><span class="o">,</span> <span class="k">_</span><span class="o">,</span> <span class="k">_</span><span class="o">,</span> <span class="n">headers</span><span class="o">,</span> <span class="k">_</span><span class="o">)</span> <span class="k">⇒</span>
             <span class="nc">OKResponse</span><span class="o">(</span><span class="nc">ByteString</span><span class="o">(</span><span class="s">&quot;&lt;p&gt;pong&lt;/p&gt;&quot;</span><span class="o">),</span>
               <span class="n">request</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">exists</span> <span class="o">{</span>
                 <span class="k">case</span> <span class="nc">Header</span><span class="o">(</span><span class="n">n</span><span class="o">,</span> <span class="n">v</span><span class="o">)</span> <span class="k">⇒</span>
@@ -513,7 +497,7 @@ def readPChar = IO take 3 map {
 </div>
 <p>A <tt class="docutils literal"><span class="pre">main</span></tt> method to start everything up:</p>
 <div class="highlight-scala"><div class="highlight"><pre><span class="k">object</span> <span class="nc">Main</span> <span class="k">extends</span> <span class="nc">App</span> <span class="o">{</span>
-  <span class="k">val</span> <span class="n">port</span> <span class="k">=</span> <span class="nc">Option</span><span class="o">(</span><span class="nc">System</span><span class="o">.</span><span class="n">getenv</span><span class="o">(</span><span class="s">&quot;PORT&quot;</span><span class="o">))</span> <span class="n">map</span> <span class="o">(</span><span class="n">_</span><span class="o">.</span><span class="n">toInt</span><span class="o">)</span> <span class="n">getOrElse</span> <span class="mi">8080</span>
+  <span class="k">val</span> <span class="n">port</span> <span class="k">=</span> <span class="nc">Option</span><span class="o">(</span><span class="nc">System</span><span class="o">.</span><span class="n">getenv</span><span class="o">(</span><span class="s">&quot;PORT&quot;</span><span class="o">))</span> <span class="n">map</span> <span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">toInt</span><span class="o">)</span> <span class="n">getOrElse</span> <span class="mi">8080</span>
   <span class="k">val</span> <span class="n">system</span> <span class="k">=</span> <span class="nc">ActorSystem</span><span class="o">()</span>
   <span class="k">val</span> <span class="n">server</span> <span class="k">=</span> <span class="n">system</span><span class="o">.</span><span class="n">actorOf</span><span class="o">(</span><span class="nc">Props</span><span class="o">(</span><span class="n">classOf</span><span class="o">[</span><span class="kt">HttpServer</span><span class="o">],</span> <span class="n">port</span><span class="o">))</span>
 <span class="o">}</span>
@@ -567,177 +551,10 @@ def readPChar = IO take 3 map {
       © 2013 <a href="http://typesafe.com/">Typesafe Inc.</a> <span class="license">Akka is Open Source and available under the Apache 2 License.</span>
     </p>
     <p style="float: right; font-size: 12px;">
-      Last updated: Oct 23, 2013
+      Last updated: Feb 22, 2014
     </p>          
   </div>
 </div>
-<script src="http://www.google.com/jsapi" type="text/javascript"></script>
-<script type="text/javascript">
-    google.load('search', '1', {language : 'en', style : google.loader.themes.MINIMALIST});
-    google.setOnLoadCallback(function() {
-    var customSearchOptions = {};  var customSearchControl = new google.search.CustomSearchControl(
-    '003065520604945464838:izzukx8-qba', customSearchOptions);
-    customSearchControl.setResultSetSize(google.search.Search.FILTERED_CSE_RESULTSET);
-    customSearchControl.draw('cse');
-    var path = window.location.pathname.split('/').slice(0,4);
-    if(window.location.hostname && path.length >= 4) {
-    var site = "site:" + window.location.hostname + path.join('/').toString();
-    customSearchControl.setSearchStartingCallback(this, function(c, s, q) { s.setQueryAddition(site); });
-    }
-    }, true);
-</script>
-<style type="text/css">
-    .gsc-control-cse {
-    font-family: Arial, sans-serif;
-    border-color: rgb(242, 242, 235);
-    background-color: rgb(242, 242, 235);
-    }
-    .gsc-control-cse .gsc-table-result {
-      font-family: Arial, sans-serif;
-      display: block;
-    }
-    input.gsc-input {
-    border-color: #BBBBBB;
-    }
-    input.gsc-search-button {
-    border-color: rgb(34, 57, 64);
-    background-color: rgb(68, 114, 129);
-    color: #FFFFFF;
-    }
-    .gsc-tabHeader.gsc-tabhInactive {
-    border-color: #777777;
-    background-color: #777777;
-    }
-    .gsc-tabHeader.gsc-tabhActive {
-    border-color: #333333;
-    background-color: #333333;
-    }
-    .gsc-tabsArea {
-    border-color: #333333;
-    }
-    .gsc-webResult.gsc-result,
-    .gsc-results .gsc-imageResult {
-      border-color: #666666;
-      background-color: #FFFFFF;
-      padding: 0.5em 0.5em;
-    }
-    .gsc-webResult.gsc-result:hover,
-    .gsc-imageResult:hover {
-      border-color: #AAAAAA;
-      background-color: #FFFFFF;
-      padding: 0.5em 0.5em;
-    }
-    .gsc-webResult.gsc-result.gsc-promotion:hover {
-    border-color: #AAAAAA;
-    background-color: #FFFFFF;
-    }
-    .gs-webResult.gs-result a.gs-title:link,
-    .gs-webResult.gs-result a.gs-title:link b,
-    .gs-imageResult a.gs-title:link,
-    .gs-imageResult a.gs-title:link b {
-    color: #444444;
-    }
-    .gs-webResult.gs-result a.gs-title:visited,
-    .gs-webResult.gs-result a.gs-title:visited b,
-    .gs-imageResult a.gs-title:visited,
-    .gs-imageResult a.gs-title:visited b {
-    color: #444444;
-    }
-    .gs-webResult.gs-result a.gs-title:hover,
-    .gs-webResult.gs-result a.gs-title:hover b,
-    .gs-imageResult a.gs-title:hover,
-    .gs-imageResult a.gs-title:hover b {
-    color: #444444;
-    }
-    .gs-webResult.gs-result a.gs-title:active,
-    .gs-webResult.gs-result a.gs-title:active b,
-    .gs-imageResult a.gs-title:active,
-    .gs-imageResult a.gs-title:active b {
-    color: #777777;
-    }
-    .gsc-cursor-page {
-    color: #444444;
-    }
-    a.gsc-trailing-more-results:link {
-    color: #444444;
-    }
-    .gs-webResult .gs-snippet,
-    .gs-imageResult .gs-snippet,
-    .gs-fileFormatType {
-    color: #333333;
-    }
-    .gs-webResult div.gs-visibleUrl,
-    .gs-imageResult div.gs-visibleUrl {
-    color: #000000;
-    }
-    .gs-webResult div.gs-visibleUrl-short {
-    color: #000000;
-    }
-    .gs-webResult div.gs-visibleUrl-short {
-    display: none;
-    }
-    .gs-webResult div.gs-visibleUrl-long {
-    display: block;
-    }
-    .gs-promotion div.gs-visibleUrl-short {
-    display: none;
-    }
-    .gs-promotion div.gs-visibleUrl-long {
-    display: block;
-    }
-    .gsc-cursor-box {
-    border-color: #FFFFFF;
-    }
-    .gsc-results .gsc-cursor-box .gsc-cursor-page {
-    border-color: #777777;
-    background-color: #FFFFFF;
-    color: #444444;
-    }
-    .gsc-results .gsc-cursor-box .gsc-cursor-current-page {
-    border-color: #333333;
-    background-color: #333333;
-    color: #444444;
-    }
-    .gsc-webResult.gsc-result.gsc-promotion {
-    border-color: #CCCCCC;
-    background-color: #E6E6E6;
-    }
-    .gsc-completion-title {
-    color: #444444;
-    }
-    .gsc-completion-snippet {
-    color: #333333;
-    }
-    .gs-promotion a.gs-title:link,
-    .gs-promotion a.gs-title:link *,
-    .gs-promotion .gs-snippet a:link {
-    color: #0000CC;
-    }
-    .gs-promotion a.gs-title:visited,
-    .gs-promotion a.gs-title:visited *,
-    .gs-promotion .gs-snippet a:visited {
-    color: #0000CC;
-    }
-    .gs-promotion a.gs-title:hover,
-    .gs-promotion a.gs-title:hover *,
-    .gs-promotion .gs-snippet a:hover {
-    color: #444444;
-    }
-    .gs-promotion a.gs-title:active,
-    .gs-promotion a.gs-title:active *,
-    .gs-promotion .gs-snippet a:active {
-    color: #00CC00;
-    }
-    .gs-promotion .gs-snippet,
-    .gs-promotion .gs-title .gs-promotion-title-right,
-    .gs-promotion .gs-title .gs-promotion-title-right *  {
-    color: #333333;
-    }
-    .gs-promotion .gs-visibleUrl,
-    .gs-promotion .gs-visibleUrl-short {
-    color: #00CC00;
-    }
-</style>
 <script type="text/javascript">
   $('#toc').toc();
 </script>

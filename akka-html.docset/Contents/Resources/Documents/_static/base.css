@@ -8,11 +8,11 @@
 	.box { font-family: 'Exo', sans-serif; font-size: 36px; font-weight: 400; color: rgba(255, 255, 255, 1); text-shadow:0 2px 0 #000000; line-height: 38px; margin-bottom: 20px;}
 	.small-box { font-size: 18px; line-height: 22px; font-weight: 300; color: #427380; text-shadow:0 2px 0 #0d262b;}
 	.bold { font-weight: 600; }
-	.hexagons { position: absolute; top: 60px; left: 490px; height: 385px; width: 252px; background: url('http://doc.akka.io/docs/akka/2.2.3/_static/{{ site.baseurl }}/resources/images/hexagons.png') no-repeat center top; }
+	.hexagons { position: absolute; top: 60px; left: 490px; height: 385px; width: 252px; background: url('{{ site.baseurl }}/resources/images/hexagons.png') no-repeat center top; }
 	.light-strip { background: #f2f2eb; min-height: 200px;}
-	.under-main { background: #f2f2eb url('http://doc.akka.io/docs/akka/2.2.3/_static/{{ site.baseurl }}/resources/images/bottom-main-bg.png') repeat-x; }
+	.under-main { background: #f2f2eb url('{{ site.baseurl }}/resources/images/bottom-main-bg.png') repeat-x; }
 	.darker-strip { background: #dfdfd9; min-height: 200px;}
-	.under-light-strip { background: #f2f2eb url('http://doc.akka.io/docs/akka/2.2.3/_static/{{ site.baseurl }}/resources/images/bottom-light-strip-bg.png') repeat-x; height: 7px; }
+	.under-light-strip { background: #f2f2eb url('{{ site.baseurl }}/resources/images/bottom-light-strip-bg.png') repeat-x; height: 7px; }
 	.simple-concurrency { position: absolute; top: 135px; left: 290px; width: 200px; text-align: right; font-family: 'Exo', sans-serif; font-size: 20px; font-weight: 400; color: rgba(255, 255, 255, 1); text-shadow:0 2px 0 #000000; line-height: 22px;}
 	.simple-concurrency p { font-size: 14px; line-height: 18px; font-weight: 300; color: #5696a6; text-shadow:0 2px 0 #0d262b; }
 	.fault-tolerance { position: absolute; top: 270px; left: 290px; width: 200px; text-align: right; font-family: 'Exo', sans-serif; font-size: 20px; font-weight: 400; color: rgba(255, 255, 255, 1); text-shadow:0 2px 0 #000000; line-height: 22px;}
@@ -35,16 +35,16 @@
 .slide .scala { position: absolute; z-index: 11; width: 460px; background: #fefbf3; }
 pre { border: 0px solid #333; background-color: transparent;}
 .tab-scala { position: absolute; top: 0px; left: 0px; width: 60px; height: 30px; padding: 6px; background: #fefbf3; border: 1px solid rgba(0,0,0,.2); -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.1); -moz-box-shadow: 0 1px 2px rgba(0,0,0,.1); box-shadow: 0 1px 2px rgba(0,0,0,.1); -webkit-border-radius:4px; -moz-border-radius:4px; border-radius:4px; }
-.tab-scala-fix { position: absolute; left: 1px; top: 26px; z-index: 12; width: 72px; height: 2px; background: url('http://doc.akka.io/docs/akka/2.2.3/_static/{{ site.baseurl }}/resources/images/tabfix.gif'); }
+.tab-scala-fix { position: absolute; left: 1px; top: 26px; z-index: 12; width: 72px; height: 2px; background: url('{{ site.baseurl }}/resources/images/tabfix.gif'); }
 .java-toggle { position: absolute; top: 0px; left: 76px; padding: 6px; font-weight: bold; color: rgba(89, 80, 80, 0.6); text-shadow:0 1px 0 #ffffff; }
 .tab-java { position: absolute; z-index: 1; top: 50px; left: 461px; width: 60px; height: 30px; padding: 6px; background: #fefbf3; border: 1px solid rgba(0,0,0,.2); -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.1); -moz-box-shadow: 0 1px 2px rgba(0,0,0,.1); box-shadow: 0 1px 2px rgba(0,0,0,.1); -webkit-border-radius:4px; -moz-border-radius:4px; border-radius:4px; font-weight: bold; }
-.tab-java-fix { position: absolute; left: 462px; top: 26px; z-index: 12; width: 72px; height: 2px; background: url('http://doc.akka.io/docs/akka/2.2.3/_static/{{ site.baseurl }}/resources/images/tabfix.gif'); }
+.tab-java-fix { position: absolute; left: 462px; top: 26px; z-index: 12; width: 72px; height: 2px; background: url('{{ site.baseurl }}/resources/images/tabfix.gif'); }
 .used-by h2 { font-family: 'Exo', sans-serif; font-size: 32px; font-weight: 400; color: #595959; text-shadow:0 1px 0 #ffffff; line-height: 34px; margin-bottom: 12px; } /*gray: 595959, green: 49bf00*/
-.used-by-header { background: url('http://doc.akka.io/docs/akka/2.2.3/_static/{{ site.baseurl }}/resources/images/used-by-bg.png') 0 7px repeat-x; text-align: center; }
+.used-by-header { background: url('{{ site.baseurl }}/resources/images/used-by-bg.png') 0 7px repeat-x; text-align: center; }
 .used-by-header .text { display: inline-block; padding: 0 20px; background: #dfdfd9; font-weight: bold; color: rgba(88, 111, 117, 0.8);}
 .used-by-logos { text-align: center; }
 .used-by-logos img { margin: 10px 10px;}
-.between-dark-strips { background: url('http://doc.akka.io/docs/akka/2.2.3/_static/{{ site.baseurl }}/resources/images/between-dark-strips-bg.gif') repeat-x; height: 3px; margin-bottom: 20px; }
+.between-dark-strips { background: url('{{ site.baseurl }}/resources/images/between-dark-strips-bg.gif') repeat-x; height: 3px; margin-bottom: 20px; }
 .three-bars { padding-bottom: 30px; }
 .three-bars h2 { font-family: 'Exo', sans-serif; font-size: 28px; font-weight: 400; color: #595959; text-shadow:0 1px 0 #ffffff; line-height: 30px; margin-bottom: 8px; }
 .three-bars h2 a { color: #447281; }

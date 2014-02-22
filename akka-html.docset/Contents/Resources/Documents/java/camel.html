@@ -1,6 +1,5 @@
 
 
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -43,18 +42,6 @@
     <link rel="up" title="Networking" href="index-network.html" />
     <link rel="next" title="Utilities" href="index-utilities.html" />
     <link rel="prev" title="ZeroMQ" href="zeromq.html" />
-    <!--Google Analytics-->
-    <script type="text/javascript">
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-21117439-1']);
-      _gaq.push(['_setDomainName', 'akka.io']);
-      _gaq.push(['_trackPageview']);
-      (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })()
-    </script>
 
   </head>
   <body>
@@ -101,10 +88,7 @@
             </ul>
           </div>
         </div>
-        <div class="row">
-          <div class="span9">
-            <div id="cse">Loading</div>
-          </div><div class="span9">
+        <div class="row"><div class="span9">
             
   <div class="section" id="camel">
 <span id="camel-java"></span><h1>Camel</h1>
@@ -308,7 +292,7 @@ messages from the <tt class="docutils literal"><span class="pre">file:data/input
 <p>Whenever a file is put into the data/input/actor directory, its content is
 picked up by the Camel <a class="reference external" href="http://camel.apache.org/file2.html">file component</a> and sent as message to the
 actor. Messages consumed by actors from Camel endpoints are of type
-<a class="reference internal" href="camel.html#camelmessage">CamelMessage</a>. These are immutable representations of Camel messages.</p>
+<a class="reference internal" href="#camelmessage">CamelMessage</a>. These are immutable representations of Camel messages.</p>
 <p>Here's another example that sets the endpointUri to
 <tt class="docutils literal"><span class="pre">jetty:http://localhost:8877/camel/default</span></tt>. It causes Camel's <a class="reference external" href="http://camel.apache.org/jetty.html">Jetty
 component</a> to start an embedded <a class="reference external" href="http://www.eclipse.org/jetty/">Jetty</a> server, accepting HTTP connections
@@ -335,7 +319,7 @@ from localhost on port 8877.</p>
 <p>After starting the actor, clients can send messages to that actor by POSTing to
 <tt class="docutils literal"><span class="pre">http://localhost:8877/camel/default</span></tt>. The actor sends a response by using the
 getSender().tell method. For returning a message body and headers to the HTTP
-client the response type should be <a class="reference internal" href="camel.html#camelmessage">CamelMessage</a>. For any other response type, a
+client the response type should be <a class="reference internal" href="#camelmessage">CamelMessage</a>. For any other response type, a
 new CamelMessage object is created by akka-camel with the actor response as message
 body.</p>
 <div class="section" id="delivery-acknowledgements">
@@ -639,7 +623,7 @@ asynchronous routing engine. Asynchronous responses are wrapped and added to the
 producer actor's mailbox for later processing. By default, response messages are
 returned to the initial sender but this can be overridden by Producer
 implementations (see also description of the <tt class="docutils literal"><span class="pre">onRouteResponse</span></tt> method
-in <a class="reference internal" href="camel.html#camel-custom-processing-java"><em>Custom Processing</em></a>).</li>
+in <a class="reference internal" href="#camel-custom-processing-java"><em>Custom Processing</em></a>).</li>
 </ul>
 <p>However, asynchronous two-way message exchanges, without allocating a thread for
 the full duration of exchange, cannot be generically supported by Camel's
@@ -650,7 +634,7 @@ to do other work) and resume processing when the response is ready. This is
 currently the case for a <a class="reference external" href="http://camel.apache.org/asynchronous-routing-engine.html">subset of components</a> such as the <a class="reference external" href="http://camel.apache.org/jetty.html">Jetty component</a>.
 All other Camel components can still be used, of course, but they will cause
 allocation of a thread for the duration of an in-out message exchange. There's
-also a <a class="reference internal" href="camel.html#camel-async-example-java"><em>Asynchronous routing and transformation example</em></a> that implements both, an asynchronous
+also a <a class="reference internal" href="#camel-async-example-java"><em>Asynchronous routing and transformation example</em></a> that implements both, an asynchronous
 consumer and an asynchronous producer, with the jetty component.</p>
 <p>If the used Camel component is blocking it might be necessary to use a separate
 <a class="reference internal" href="dispatchers.html#dispatchers-java"><em>dispatcher</em></a> for the producer. The Camel processor is
@@ -675,9 +659,9 @@ most use cases, some applications may require more specialized routes to actors.
 The akka-camel module provides two mechanisms for customizing routes to actors,
 which will be explained in this section. These are:</p>
 <ul class="simple">
-<li>Usage of <a class="reference internal" href="camel.html#camel-components-java"><em>Akka Camel components</em></a> to access actors.
+<li>Usage of <a class="reference internal" href="#camel-components-java"><em>Akka Camel components</em></a> to access actors.
 Any Camel route can use these components to access Akka actors.</li>
-<li><a class="reference internal" href="camel.html#camel-intercepting-route-construction-java"><em>Intercepting route construction</em></a> to actors.
+<li><a class="reference internal" href="#camel-intercepting-route-construction-java"><em>Intercepting route construction</em></a> to actors.
 This option gives you the ability to change routes that have already been added to Camel.
 Consumer actors have a hook into the route definition process which can be used to change the route.</li>
 </ul>
@@ -724,7 +708,7 @@ for instance <tt class="docutils literal"><span class="pre">10</span> <span clas
 in the url it is handy to use a +
 between the amount and the unit, like
 for example <tt class="docutils literal"><span class="pre">200+millis</span></tt></p>
-<p class="last">See also <a class="reference internal" href="camel.html#camel-timeout-java"><em>Consumer timeout</em></a>.</p>
+<p class="last">See also <a class="reference internal" href="#camel-timeout-java"><em>Consumer timeout</em></a>.</p>
 </td>
 </tr>
 <tr class="row-odd"><td>autoAck</td>
@@ -735,13 +719,13 @@ are auto-acknowledged when the message is
 added to the actor's mailbox. If set to
 false, actors must acknowledge the
 receipt of the message.</p>
-<p class="last">See also <a class="reference internal" href="camel.html#camel-acknowledgements-java"><em>Delivery acknowledgements</em></a>.</p>
+<p class="last">See also <a class="reference internal" href="#camel-acknowledgements-java"><em>Delivery acknowledgements</em></a>.</p>
 </td>
 </tr>
 </tbody>
 </table>
 <p>Here's an actor endpoint URI example containing an actor path:</p>
-<div class="highlight-scala"><div class="highlight"><pre><span class="n">akka</span><span class="o">://</span><span class="n">some</span><span class="o">-</span><span class="n">system</span><span class="o">/</span><span class="n">user</span><span class="o">/</span><span class="n">myconsumer</span><span class="o">?</span><span class="n">autoAck</span><span class="o">=</span><span class="kc">false</span><span class="o">&amp;</span><span class="n">replyTimeout</span><span class="o">=</span><span class="mi">100</span><span class="o">+</span><span class="n">millis</span>
+<div class="highlight-scala"><div class="highlight"><pre><span class="n">akka</span><span class="o">://</span><span class="n">some</span><span class="o">-</span><span class="n">system</span><span class="o">/</span><span class="n">user</span><span class="o">/</span><span class="n">myconsumer</span><span class="o">?</span><span class="n">autoAck</span><span class="k">=</span><span class="kc">false</span><span class="o">&amp;</span><span class="n">replyTimeout</span><span class="k">=</span><span class="mi">100</span><span class="o">+</span><span class="n">millis</span>
 </pre></div>
 </div>
 <p>In the following example, a custom route to an actor is created, using the
@@ -802,7 +786,7 @@ the HTTP request.</p>
 </div>
 <div class="section" id="intercepting-route-construction">
 <span id="camel-intercepting-route-construction-java"></span><h3>Intercepting route construction</h3>
-<p>The previous section, <a class="reference internal" href="camel.html#camel-components-java"><em>Akka Camel components</em></a>, explained how to setup a route to
+<p>The previous section, <a class="reference internal" href="#camel-components-java"><em>Akka Camel components</em></a>, explained how to setup a route to
 an actor manually.
 It was the application's responsibility to define the route and add it to the current CamelContext.
 This section explains a more convenient way to define custom routes: akka-camel is still setting up the routes to consumer actors
@@ -873,7 +857,7 @@ returns a ProcessorDefinition (in the above example, the ProcessorDefinition
 returned by the end method. See the <a class="reference external" href="https://svn.apache.org/repos/asf/camel/tags/camel-2.8.0/camel-core/src/main/java/org/apache/camel/model/">org.apache.camel.model</a> package for
 details). After executing the route definition handler, akka-camel finally calls
 a to(targetActorUri) on the returned ProcessorDefinition to complete the
-route to the consumer actor (where targetActorUri is the actor component URI as described in <a class="reference internal" href="camel.html#access-to-actors-java"><em>Access to actors</em></a>).
+route to the consumer actor (where targetActorUri is the actor component URI as described in <a class="reference internal" href="#access-to-actors-java"><em>Access to actors</em></a>).
 If the actor cannot be found, a <cite>ActorNotRegisteredException</cite> is thrown.</p>
 <p>*) Before passing the RouteDefinition instance to the route definition handler,
 akka-camel may make some further modifications to it.</p>
@@ -884,7 +868,7 @@ akka-camel may make some further modifications to it.</p>
 <div class="section" id="asynchronous-routing-and-transformation-example">
 <span id="camel-async-example-java"></span><h3>Asynchronous routing and transformation example</h3>
 <p>This example demonstrates how to implement consumer and producer actors that
-support <a class="reference internal" href="camel.html#camel-asynchronous-routing-java"><em>Asynchronous routing</em></a> with their Camel endpoints. The sample
+support <a class="reference internal" href="#camel-asynchronous-routing-java"><em>Asynchronous routing</em></a> with their Camel endpoints. The sample
 application transforms the content of the Akka homepage, <a class="reference external" href="http://akka.io">http://akka.io</a>, by
 replacing every occurrence of <em>Akka</em> with <em>AKKA</em>. To run this example, add
 a Boot class that starts the actors. After starting
@@ -1198,177 +1182,10 @@ seconds:</p>
       © 2013 <a href="http://typesafe.com/">Typesafe Inc.</a> <span class="license">Akka is Open Source and available under the Apache 2 License.</span>
     </p>
     <p style="float: right; font-size: 12px;">
-      Last updated: Oct 23, 2013
+      Last updated: Feb 22, 2014
     </p>          
   </div>
 </div>
-<script src="http://www.google.com/jsapi" type="text/javascript"></script>
-<script type="text/javascript">
-    google.load('search', '1', {language : 'en', style : google.loader.themes.MINIMALIST});
-    google.setOnLoadCallback(function() {
-    var customSearchOptions = {};  var customSearchControl = new google.search.CustomSearchControl(
-    '003065520604945464838:izzukx8-qba', customSearchOptions);
-    customSearchControl.setResultSetSize(google.search.Search.FILTERED_CSE_RESULTSET);
-    customSearchControl.draw('cse');
-    var path = window.location.pathname.split('/').slice(0,4);
-    if(window.location.hostname && path.length >= 4) {
-    var site = "site:" + window.location.hostname + path.join('/').toString();
-    customSearchControl.setSearchStartingCallback(this, function(c, s, q) { s.setQueryAddition(site); });
-    }
-    }, true);
-</script>
-<style type="text/css">
-    .gsc-control-cse {
-    font-family: Arial, sans-serif;
-    border-color: rgb(242, 242, 235);
-    background-color: rgb(242, 242, 235);
-    }
-    .gsc-control-cse .gsc-table-result {
-      font-family: Arial, sans-serif;
-      display: block;
-    }
-    input.gsc-input {
-    border-color: #BBBBBB;
-    }
-    input.gsc-search-button {
-    border-color: rgb(34, 57, 64);
-    background-color: rgb(68, 114, 129);
-    color: #FFFFFF;
-    }
-    .gsc-tabHeader.gsc-tabhInactive {
-    border-color: #777777;
-    background-color: #777777;
-    }
-    .gsc-tabHeader.gsc-tabhActive {
-    border-color: #333333;
-    background-color: #333333;
-    }
-    .gsc-tabsArea {
-    border-color: #333333;
-    }
-    .gsc-webResult.gsc-result,
-    .gsc-results .gsc-imageResult {
-      border-color: #666666;
-      background-color: #FFFFFF;
-      padding: 0.5em 0.5em;
-    }
-    .gsc-webResult.gsc-result:hover,
-    .gsc-imageResult:hover {
-      border-color: #AAAAAA;
-      background-color: #FFFFFF;
-      padding: 0.5em 0.5em;
-    }
-    .gsc-webResult.gsc-result.gsc-promotion:hover {
-    border-color: #AAAAAA;
-    background-color: #FFFFFF;
-    }
-    .gs-webResult.gs-result a.gs-title:link,
-    .gs-webResult.gs-result a.gs-title:link b,
-    .gs-imageResult a.gs-title:link,
-    .gs-imageResult a.gs-title:link b {
-    color: #444444;
-    }
-    .gs-webResult.gs-result a.gs-title:visited,
-    .gs-webResult.gs-result a.gs-title:visited b,
-    .gs-imageResult a.gs-title:visited,
-    .gs-imageResult a.gs-title:visited b {
-    color: #444444;
-    }
-    .gs-webResult.gs-result a.gs-title:hover,
-    .gs-webResult.gs-result a.gs-title:hover b,
-    .gs-imageResult a.gs-title:hover,
-    .gs-imageResult a.gs-title:hover b {
-    color: #444444;
-    }
-    .gs-webResult.gs-result a.gs-title:active,
-    .gs-webResult.gs-result a.gs-title:active b,
-    .gs-imageResult a.gs-title:active,
-    .gs-imageResult a.gs-title:active b {
-    color: #777777;
-    }
-    .gsc-cursor-page {
-    color: #444444;
-    }
-    a.gsc-trailing-more-results:link {
-    color: #444444;
-    }
-    .gs-webResult .gs-snippet,
-    .gs-imageResult .gs-snippet,
-    .gs-fileFormatType {
-    color: #333333;
-    }
-    .gs-webResult div.gs-visibleUrl,
-    .gs-imageResult div.gs-visibleUrl {
-    color: #000000;
-    }
-    .gs-webResult div.gs-visibleUrl-short {
-    color: #000000;
-    }
-    .gs-webResult div.gs-visibleUrl-short {
-    display: none;
-    }
-    .gs-webResult div.gs-visibleUrl-long {
-    display: block;
-    }
-    .gs-promotion div.gs-visibleUrl-short {
-    display: none;
-    }
-    .gs-promotion div.gs-visibleUrl-long {
-    display: block;
-    }
-    .gsc-cursor-box {
-    border-color: #FFFFFF;
-    }
-    .gsc-results .gsc-cursor-box .gsc-cursor-page {
-    border-color: #777777;
-    background-color: #FFFFFF;
-    color: #444444;
-    }
-    .gsc-results .gsc-cursor-box .gsc-cursor-current-page {
-    border-color: #333333;
-    background-color: #333333;
-    color: #444444;
-    }
-    .gsc-webResult.gsc-result.gsc-promotion {
-    border-color: #CCCCCC;
-    background-color: #E6E6E6;
-    }
-    .gsc-completion-title {
-    color: #444444;
-    }
-    .gsc-completion-snippet {
-    color: #333333;
-    }
-    .gs-promotion a.gs-title:link,
-    .gs-promotion a.gs-title:link *,
-    .gs-promotion .gs-snippet a:link {
-    color: #0000CC;
-    }
-    .gs-promotion a.gs-title:visited,
-    .gs-promotion a.gs-title:visited *,
-    .gs-promotion .gs-snippet a:visited {
-    color: #0000CC;
-    }
-    .gs-promotion a.gs-title:hover,
-    .gs-promotion a.gs-title:hover *,
-    .gs-promotion .gs-snippet a:hover {
-    color: #444444;
-    }
-    .gs-promotion a.gs-title:active,
-    .gs-promotion a.gs-title:active *,
-    .gs-promotion .gs-snippet a:active {
-    color: #00CC00;
-    }
-    .gs-promotion .gs-snippet,
-    .gs-promotion .gs-title .gs-promotion-title-right,
-    .gs-promotion .gs-title .gs-promotion-title-right *  {
-    color: #333333;
-    }
-    .gs-promotion .gs-visibleUrl,
-    .gs-promotion .gs-visibleUrl-short {
-    color: #00CC00;
-    }
-</style>
 <script type="text/javascript">
   $('#toc').toc();
 </script>

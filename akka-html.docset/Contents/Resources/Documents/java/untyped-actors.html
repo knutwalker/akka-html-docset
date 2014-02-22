@@ -1,6 +1,5 @@
 
 
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -43,18 +42,6 @@
     <link rel="up" title="Actors" href="index-actors.html" />
     <link rel="next" title="Typed Actors" href="typed-actors.html" />
     <link rel="prev" title="Actors" href="index-actors.html" />
-    <!--Google Analytics-->
-    <script type="text/javascript">
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-21117439-1']);
-      _gaq.push(['_setDomainName', 'akka.io']);
-      _gaq.push(['_trackPageview']);
-      (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })()
-    </script>
 
   </head>
   <body>
@@ -101,10 +88,7 @@
             </ul>
           </div>
         </div>
-        <div class="row">
-          <div class="span9">
-            <div id="cse">Loading</div>
-          </div><div class="span9">
+        <div class="row"><div class="span9">
             
   <div class="section" id="actors">
 <span id="untyped-actors-java"></span><h1>Actors</h1>
@@ -328,7 +312,7 @@ another child to the same parent an <cite>InvalidActorNameException</cite> is th
 <div class="section" id="dependency-injection">
 <span id="actor-create-factory"></span><h3>Dependency Injection</h3>
 <p>If your UntypedActor has a constructor that takes parameters then those need to
-be part of the <tt class="xref py py-class docutils literal"><span class="pre">Props</span></tt> as well, as described <a class="reference internal" href="untyped-actors.html#props">above</a>. But there
+be part of the <tt class="xref py py-class docutils literal"><span class="pre">Props</span></tt> as well, as described <a class="reference internal" href="#props">above</a>. But there
 are cases when a factory method must be used, for example when the actual
 constructor arguments are determined by a dependency injection framework.</p>
 <div class="highlight-scala"><div class="highlight"><pre><span class="k">import</span> <span class="nn">akka.actor.Actor</span><span class="o">;</span>
@@ -413,7 +397,7 @@ to have them converted into actual Debug messages).</p>
 <ul>
 <li><p class="first"><tt class="xref py py-obj docutils literal"><span class="pre">getSelf()</span></tt> reference to the <tt class="xref py py-class docutils literal"><span class="pre">ActorRef</span></tt> of the actor</p>
 </li>
-<li><p class="first"><tt class="xref py py-obj docutils literal"><span class="pre">getSender()</span></tt> reference sender Actor of the last received message, typically used as described in <a class="reference internal" href="untyped-actors.html#untypedactor-reply"><em>Reply to messages</em></a></p>
+<li><p class="first"><tt class="xref py py-obj docutils literal"><span class="pre">getSender()</span></tt> reference sender Actor of the last received message, typically used as described in <a class="reference internal" href="#untypedactor-reply"><em>Reply to messages</em></a></p>
 </li>
 <li><p class="first"><tt class="xref py py-obj docutils literal"><span class="pre">supervisorStrategy()</span></tt> user overridable definition the strategy to use for supervising child actors</p>
 <p>This strategy is typically declared inside the actor in order to have access
@@ -432,7 +416,7 @@ time).</p>
 <li>parent supervisor</li>
 <li>supervised children</li>
 <li>lifecycle monitoring</li>
-<li>hotswap behavior stack as described in <a class="reference internal" href="untyped-actors.html#untypedactor-hotswap"><em>HotSwap</em></a></li>
+<li>hotswap behavior stack as described in <a class="reference internal" href="#untypedactor-hotswap"><em>HotSwap</em></a></li>
 </ul>
 </li>
 </ul>
@@ -461,7 +445,7 @@ described in the following:</p>
 class.</p>
 <div class="section" id="actor-lifecycle">
 <h3>Actor Lifecycle</h3>
-<img alt="../_images/actor_lifecycle.png" class="align-center" src="../_images/actor_lifecycle.png" style="width: 680px;" />
+<a class="reference internal image-reference" href="../_images/actor_lifecycle.png"><img alt="../_images/actor_lifecycle.png" class="align-center" src="../_images/actor_lifecycle.png" style="width: 680px;" /></a>
 <p>A path in an actor system represents a &quot;place&quot; which might be occupied
 by a living actor. Initially (apart from system initialized actors) a path is
 empty. When <tt class="docutils literal"><span class="pre">actorOf()</span></tt> is called it assigns an <em>incarnation</em> of the actor
@@ -485,7 +469,7 @@ occupying it. <tt class="docutils literal"><span class="pre">ActorSelection</spa
 possible to resolve the current incarnation's <tt class="docutils literal"><span class="pre">ActorRef</span></tt> living under the
 path by sending an <tt class="docutils literal"><span class="pre">Identify</span></tt> message to the <tt class="docutils literal"><span class="pre">ActorSelection</span></tt> which
 will be replied to with an <tt class="docutils literal"><span class="pre">ActorIdentity</span></tt> containing the correct reference
-(see <a class="reference internal" href="untyped-actors.html#actorselection-java"><em>Identifying Actors via Actor Selection</em></a>). This can also be done with the <tt class="docutils literal"><span class="pre">resolveOne</span></tt>
+(see <a class="reference internal" href="#actorselection-java"><em>Identifying Actors via Actor Selection</em></a>). This can also be done with the <tt class="docutils literal"><span class="pre">resolveOne</span></tt>
 method of the <tt class="xref py py-class docutils literal"><span class="pre">ActorSelection</span></tt>, which returns a <tt class="docutils literal"><span class="pre">Future</span></tt> of the matching
 <tt class="xref py py-class docutils literal"><span class="pre">ActorRef</span></tt>.</p>
 </div>
@@ -494,7 +478,7 @@ method of the <tt class="xref py py-class docutils literal"><span class="pre">Ac
 <p>In order to be notified when another actor terminates (i.e. stops permanently,
 not temporary failure and restart), an actor may register itself for reception
 of the <tt class="xref py py-class docutils literal"><span class="pre">Terminated</span></tt> message dispatched by the other actor upon
-termination (see <a class="reference internal" href="untyped-actors.html#stopping-actors">Stopping Actors</a>). This service is provided by the
+termination (see <a class="reference internal" href="#stopping-actors">Stopping Actors</a>). This service is provided by the
 <tt class="xref py py-class docutils literal"><span class="pre">DeathWatch</span></tt> component of the actor system.</p>
 <p>Registering a monitor is easy (see fourth line, the rest is for demonstrating
 the whole functionality):</p>
@@ -977,7 +961,7 @@ depends on the mailbox implementation.</p>
 mailbox processing and sends a stop command to all its children, then it keeps
 processing the internal termination notifications from its children until the last one is
 gone, finally terminating itself (invoking <tt class="xref py py-meth docutils literal"><span class="pre">postStop</span></tt>, dumping mailbox,
-publishing <tt class="xref py py-class docutils literal"><span class="pre">Terminated</span></tt> on the <a class="reference internal" href="untyped-actors.html#deathwatch-java"><em>DeathWatch</em></a>, telling
+publishing <tt class="xref py py-class docutils literal"><span class="pre">Terminated</span></tt> on the <a class="reference internal" href="#deathwatch-java"><em>DeathWatch</em></a>, telling
 its supervisor). This procedure ensures that actor system sub-trees terminate
 in an orderly fashion, propagating the stop command to the leaves and
 collecting their confirmation back to the stopped supervisor. If one of the
@@ -1402,177 +1386,10 @@ done.</p>
       © 2013 <a href="http://typesafe.com/">Typesafe Inc.</a> <span class="license">Akka is Open Source and available under the Apache 2 License.</span>
     </p>
     <p style="float: right; font-size: 12px;">
-      Last updated: Oct 23, 2013
+      Last updated: Feb 22, 2014
     </p>          
   </div>
 </div>
-<script src="http://www.google.com/jsapi" type="text/javascript"></script>
-<script type="text/javascript">
-    google.load('search', '1', {language : 'en', style : google.loader.themes.MINIMALIST});
-    google.setOnLoadCallback(function() {
-    var customSearchOptions = {};  var customSearchControl = new google.search.CustomSearchControl(
-    '003065520604945464838:izzukx8-qba', customSearchOptions);
-    customSearchControl.setResultSetSize(google.search.Search.FILTERED_CSE_RESULTSET);
-    customSearchControl.draw('cse');
-    var path = window.location.pathname.split('/').slice(0,4);
-    if(window.location.hostname && path.length >= 4) {
-    var site = "site:" + window.location.hostname + path.join('/').toString();
-    customSearchControl.setSearchStartingCallback(this, function(c, s, q) { s.setQueryAddition(site); });
-    }
-    }, true);
-</script>
-<style type="text/css">
-    .gsc-control-cse {
-    font-family: Arial, sans-serif;
-    border-color: rgb(242, 242, 235);
-    background-color: rgb(242, 242, 235);
-    }
-    .gsc-control-cse .gsc-table-result {
-      font-family: Arial, sans-serif;
-      display: block;
-    }
-    input.gsc-input {
-    border-color: #BBBBBB;
-    }
-    input.gsc-search-button {
-    border-color: rgb(34, 57, 64);
-    background-color: rgb(68, 114, 129);
-    color: #FFFFFF;
-    }
-    .gsc-tabHeader.gsc-tabhInactive {
-    border-color: #777777;
-    background-color: #777777;
-    }
-    .gsc-tabHeader.gsc-tabhActive {
-    border-color: #333333;
-    background-color: #333333;
-    }
-    .gsc-tabsArea {
-    border-color: #333333;
-    }
-    .gsc-webResult.gsc-result,
-    .gsc-results .gsc-imageResult {
-      border-color: #666666;
-      background-color: #FFFFFF;
-      padding: 0.5em 0.5em;
-    }
-    .gsc-webResult.gsc-result:hover,
-    .gsc-imageResult:hover {
-      border-color: #AAAAAA;
-      background-color: #FFFFFF;
-      padding: 0.5em 0.5em;
-    }
-    .gsc-webResult.gsc-result.gsc-promotion:hover {
-    border-color: #AAAAAA;
-    background-color: #FFFFFF;
-    }
-    .gs-webResult.gs-result a.gs-title:link,
-    .gs-webResult.gs-result a.gs-title:link b,
-    .gs-imageResult a.gs-title:link,
-    .gs-imageResult a.gs-title:link b {
-    color: #444444;
-    }
-    .gs-webResult.gs-result a.gs-title:visited,
-    .gs-webResult.gs-result a.gs-title:visited b,
-    .gs-imageResult a.gs-title:visited,
-    .gs-imageResult a.gs-title:visited b {
-    color: #444444;
-    }
-    .gs-webResult.gs-result a.gs-title:hover,
-    .gs-webResult.gs-result a.gs-title:hover b,
-    .gs-imageResult a.gs-title:hover,
-    .gs-imageResult a.gs-title:hover b {
-    color: #444444;
-    }
-    .gs-webResult.gs-result a.gs-title:active,
-    .gs-webResult.gs-result a.gs-title:active b,
-    .gs-imageResult a.gs-title:active,
-    .gs-imageResult a.gs-title:active b {
-    color: #777777;
-    }
-    .gsc-cursor-page {
-    color: #444444;
-    }
-    a.gsc-trailing-more-results:link {
-    color: #444444;
-    }
-    .gs-webResult .gs-snippet,
-    .gs-imageResult .gs-snippet,
-    .gs-fileFormatType {
-    color: #333333;
-    }
-    .gs-webResult div.gs-visibleUrl,
-    .gs-imageResult div.gs-visibleUrl {
-    color: #000000;
-    }
-    .gs-webResult div.gs-visibleUrl-short {
-    color: #000000;
-    }
-    .gs-webResult div.gs-visibleUrl-short {
-    display: none;
-    }
-    .gs-webResult div.gs-visibleUrl-long {
-    display: block;
-    }
-    .gs-promotion div.gs-visibleUrl-short {
-    display: none;
-    }
-    .gs-promotion div.gs-visibleUrl-long {
-    display: block;
-    }
-    .gsc-cursor-box {
-    border-color: #FFFFFF;
-    }
-    .gsc-results .gsc-cursor-box .gsc-cursor-page {
-    border-color: #777777;
-    background-color: #FFFFFF;
-    color: #444444;
-    }
-    .gsc-results .gsc-cursor-box .gsc-cursor-current-page {
-    border-color: #333333;
-    background-color: #333333;
-    color: #444444;
-    }
-    .gsc-webResult.gsc-result.gsc-promotion {
-    border-color: #CCCCCC;
-    background-color: #E6E6E6;
-    }
-    .gsc-completion-title {
-    color: #444444;
-    }
-    .gsc-completion-snippet {
-    color: #333333;
-    }
-    .gs-promotion a.gs-title:link,
-    .gs-promotion a.gs-title:link *,
-    .gs-promotion .gs-snippet a:link {
-    color: #0000CC;
-    }
-    .gs-promotion a.gs-title:visited,
-    .gs-promotion a.gs-title:visited *,
-    .gs-promotion .gs-snippet a:visited {
-    color: #0000CC;
-    }
-    .gs-promotion a.gs-title:hover,
-    .gs-promotion a.gs-title:hover *,
-    .gs-promotion .gs-snippet a:hover {
-    color: #444444;
-    }
-    .gs-promotion a.gs-title:active,
-    .gs-promotion a.gs-title:active *,
-    .gs-promotion .gs-snippet a:active {
-    color: #00CC00;
-    }
-    .gs-promotion .gs-snippet,
-    .gs-promotion .gs-title .gs-promotion-title-right,
-    .gs-promotion .gs-title .gs-promotion-title-right *  {
-    color: #333333;
-    }
-    .gs-promotion .gs-visibleUrl,
-    .gs-promotion .gs-visibleUrl-short {
-    color: #00CC00;
-    }
-</style>
 <script type="text/javascript">
   $('#toc').toc();
 </script>
