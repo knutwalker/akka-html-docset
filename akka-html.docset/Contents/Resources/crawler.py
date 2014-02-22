@@ -72,7 +72,6 @@ def analyze_link(tag, fname):
 
 
 def parse_page(path):
-    sout = None
     if isdir(path):
         path = path + 'index.html'
     with open(path) as page:
@@ -166,7 +165,7 @@ if __name__ == "__main__":
         sys.exit(-1)
 
     if u'-q' in sys.argv or u'-s' in sys.argv:
-      logger = lambda *a: None
+        logger = lambda *a: None
     else:
         logger = print
 
